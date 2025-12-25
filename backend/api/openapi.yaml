@@ -117,6 +117,31 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+  /api/expenses/{id}/history:
+    get:
+      summary: Get expense history
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Expense history
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpenseHistoryResponseWrapper'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /api/expenses/{id}/approve:
     put:
       summary: Approve expense (manager only)
@@ -326,6 +351,27 @@ components:
         created_at:
           type: string
           format: date-time
+    ExpenseStatusHistoryResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        expense_id:
+          type: string
+          format: uuid
+        actor_id:
+          type: string
+          format: uuid
+        previous_status:
+          type: string
+        new_status:
+          type: string
+        notes:
+          type: string
+        created_at:
+          type: string
+          format: date-time
     ExpenseResponse:
       type: object
       properties:
@@ -392,6 +438,15 @@ components:
           type: string
         data:
           $ref: '#/components/schemas/ExpenseDetailResponse'
+    ExpenseHistoryResponseWrapper:
+      type: object
+      properties:
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExpenseStatusHistoryResponse'
     ExpenseListResponseWrapper:
       type: object
       properties:
