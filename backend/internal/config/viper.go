@@ -28,6 +28,8 @@ func NewViper() *viper.Viper {
 	config.SetDefault("PAYMENT_RETRY_COUNT", 3)
 	config.SetDefault("PAYMENT_RETRY_DELAY_SECONDS", 2)
 	config.SetDefault("PAYMENT_QUEUE_BUFFER", 100)
+	config.SetDefault("CORS_ALLOW_ORIGINS", "*")
+	config.SetDefault("CORS_ALLOW_CREDENTIALS", false)
 
 	config.SetConfigFile(".env")
 

@@ -14,7 +14,7 @@ func main() {
 	executor := command.NewCommandExecutor(viperConfig, db)
 	jwt := utils.NewJWT(viperConfig)
 	validate := config.NewValidator()
-	router := config.NewGin()
+	router := config.NewGin(viperConfig)
 
 	config.Bootstrap(&config.BootstrapConfig{
 		DB:       db,
