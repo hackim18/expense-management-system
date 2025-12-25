@@ -1,0 +1,37 @@
+package main
+
+import (
+	"fmt"
+	"go-expense-management-system/internal/command"
+	"go-expense-management-system/internal/config"
+	"go-expense-management-system/internal/utils"
+)
+
+func main() {
+	viperConfig := config.NewViper()
+	log := config.NewLogger(viperConfig)
+	db := config.NewDatabase(viperConfig, log)
+	executor := command.NewCommandExecutor(viperConfig, db)
+	jwt := utils.NewJWT(viperConfig)
+	validate := config.NewValidator()
+	router := config.NewGin()
+
+	config.Bootstrap(&config.BootstrapConfig{
+		DB:       db,
+		Router:   router,
+		Log:      log,
+		JWT:      jwt,
+		Validate: validate,
+		Config:   viperConfig,
+	})
+
+	if !executor.Execute(log) {
+		return
+	}
+
+	webPort := viperConfig.GetInt("PORT")
+	err := router.Run(fmt.Sprintf(":%d", webPort))
+	if err != nil {
+		log.Fatalf("Failed to start server: %v", err)
+	}
+}
