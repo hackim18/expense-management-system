@@ -43,3 +43,13 @@ type ApprovalResponse struct {
 type ApproveExpenseRequest struct {
 	Notes string `json:"notes,omitempty" validate:"max=500"`
 }
+
+type ExpenseStatusHistoryResponse struct {
+	ID             uuid.UUID  `json:"id"`
+	ExpenseID      uuid.UUID  `json:"expense_id"`
+	ActorID        *uuid.UUID `json:"actor_id,omitempty"`
+	PreviousStatus string     `json:"previous_status,omitempty"`
+	NewStatus      string     `json:"new_status"`
+	Notes          string     `json:"notes,omitempty"`
+	CreatedAt      time.Time  `json:"created_at"`
+}

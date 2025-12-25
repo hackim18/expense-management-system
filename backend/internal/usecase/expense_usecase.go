@@ -176,6 +176,38 @@ func (c *ExpenseUseCase) Get(ctx context.Context, auth *model.Auth, expenseID uu
 	return &response, nil
 }
 
+func (c *ExpenseUseCase) History(ctx context.Context, auth *model.Auth, expenseID uuid.UUID) ([]model.ExpenseStatusHistoryResponse, error) {
+	tx := c.DB.WithContext(ctx).Begin()
+	defer tx.Rollback()
+
+	expense := new(entity.Expense)
+	if err := c.ExpenseRepository.FindById(tx, expense, expenseID); err != nil {
+		return nil, utils.Error(messages.ErrExpenseNotFound, http.StatusNotFound, err)
+	}
+
+	if !isManager(auth) && expense.UserID != auth.UserID {
+		return nil, utils.Error(messages.Forbidden, http.StatusForbidden, nil)
+	}
+
+	histories, err := c.HistoryRepository.ListByExpenseID(tx, expense.ID)
+	if err != nil {
+		c.Log.Warnf("Failed to list expense histories: %+v", err)
+		return nil, utils.Error(messages.InternalServerError, http.StatusInternalServerError, err)
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		c.Log.Warnf("Failed to commit transaction: %+v", err)
+		return nil, utils.Error(messages.ErrCommitTransaction, http.StatusInternalServerError, err)
+	}
+
+	responses := make([]model.ExpenseStatusHistoryResponse, 0, len(histories))
+	for i := range histories {
+		responses = append(responses, converter.ExpenseStatusHistoryToResponse(&histories[i]))
+	}
+
+	return responses, nil
+}
+
 func (c *ExpenseUseCase) Approve(ctx context.Context, auth *model.Auth, expenseID uuid.UUID, request *model.ApproveExpenseRequest) (*model.ExpenseResponse, error) {
 	if !isManager(auth) {
 		return nil, utils.Error(messages.Forbidden, http.StatusForbidden, nil)

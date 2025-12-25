@@ -106,6 +106,29 @@ func (c *ExpenseController) Get(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, res)
 }
 
+func (c *ExpenseController) History(ctx *gin.Context) {
+	auth, ok := getAuthOrAbort(ctx)
+	if !ok {
+		return
+	}
+
+	expenseID, err := uuid.Parse(ctx.Param("id"))
+	if err != nil {
+		utils.HandleHTTPError(ctx, utils.Error(messages.ErrInvalidIDFormat, http.StatusBadRequest, err))
+		return
+	}
+
+	response, err := c.UseCase.History(ctx.Request.Context(), auth, expenseID)
+	if err != nil {
+		c.Log.Warnf("Failed to fetch expense history: %+v", err)
+		utils.HandleHTTPError(ctx, err)
+		return
+	}
+
+	res := utils.SuccessResponse(messages.ExpenseHistoryFetched, response)
+	ctx.JSON(http.StatusOK, res)
+}
+
 func (c *ExpenseController) Approve(ctx *gin.Context) {
 	auth, ok := getAuthOrAbort(ctx)
 	if !ok {

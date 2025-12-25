@@ -9,6 +9,7 @@ func (c *RouteConfig) RegisterExpenseRoutes(rg *gin.RouterGroup) {
 	expense.POST("", c.ExpenseController.Create)
 	expense.GET("", c.ExpenseController.List)
 	expense.GET("/:id", c.ExpenseController.Get)
+	expense.GET("/:id/history", c.ExpenseController.History)
 	expense.PUT("/:id/approve", c.ExpenseController.Approve)
 	expense.PUT("/:id/reject", c.ExpenseController.Reject)
 }

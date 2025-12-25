@@ -39,3 +39,15 @@ func ApprovalToResponse(approval *entity.Approval) model.ApprovalResponse {
 		CreatedAt:  approval.CreatedAt,
 	}
 }
+
+func ExpenseStatusHistoryToResponse(history *entity.ExpenseStatusHistory) model.ExpenseStatusHistoryResponse {
+	return model.ExpenseStatusHistoryResponse{
+		ID:             history.ID,
+		ExpenseID:      history.ExpenseID,
+		ActorID:        history.ActorID,
+		PreviousStatus: history.PreviousStatus,
+		NewStatus:      history.NewStatus,
+		Notes:          history.Notes,
+		CreatedAt:      history.CreatedAt,
+	}
+}
