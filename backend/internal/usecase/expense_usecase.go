@@ -23,6 +23,7 @@ type ExpenseUseCase struct {
 	Log                *logrus.Logger
 	ExpenseRepository  *repository.ExpenseRepository
 	ApprovalRepository *repository.ApprovalRepository
+	HistoryRepository  *repository.ExpenseStatusHistoryRepository
 	PaymentQueue       PaymentQueue
 	PaymentProcessor   PaymentProcessor
 }
@@ -32,6 +33,7 @@ func NewExpenseUseCase(
 	logger *logrus.Logger,
 	expenseRepository *repository.ExpenseRepository,
 	approvalRepository *repository.ApprovalRepository,
+	historyRepository *repository.ExpenseStatusHistoryRepository,
 	paymentQueue PaymentQueue,
 	paymentProcessor PaymentProcessor,
 ) *ExpenseUseCase {
@@ -40,6 +42,7 @@ func NewExpenseUseCase(
 		Log:                logger,
 		ExpenseRepository:  expenseRepository,
 		ApprovalRepository: approvalRepository,
+		HistoryRepository:  historyRepository,
 		PaymentQueue:       paymentQueue,
 		PaymentProcessor:   paymentProcessor,
 	}
@@ -74,6 +77,10 @@ func (c *ExpenseUseCase) Create(ctx context.Context, auth *model.Auth, request *
 
 	if err := c.ExpenseRepository.Create(tx, expense); err != nil {
 		c.Log.Warnf("Failed to create expense: %+v", err)
+		return nil, utils.Error(messages.InternalServerError, http.StatusInternalServerError, err)
+	}
+	if err := c.recordStatusChange(tx, expense, &auth.UserID, "", expense.Status, ""); err != nil {
+		c.Log.Warnf("Failed to create expense history: %+v", err)
 		return nil, utils.Error(messages.InternalServerError, http.StatusInternalServerError, err)
 	}
 
@@ -198,9 +205,14 @@ func (c *ExpenseUseCase) Approve(ctx context.Context, auth *model.Auth, expenseI
 		return nil, utils.Error(messages.InternalServerError, http.StatusInternalServerError, err)
 	}
 
+	previousStatus := expense.Status
 	expense.Status = constants.ExpenseStatusApproved
 	if err := c.ExpenseRepository.Update(tx, expense); err != nil {
 		c.Log.Warnf("Failed to update expense: %+v", err)
+		return nil, utils.Error(messages.InternalServerError, http.StatusInternalServerError, err)
+	}
+	if err := c.recordStatusChange(tx, expense, &auth.UserID, previousStatus, expense.Status, approval.Notes); err != nil {
+		c.Log.Warnf("Failed to create expense history: %+v", err)
 		return nil, utils.Error(messages.InternalServerError, http.StatusInternalServerError, err)
 	}
 
@@ -242,9 +254,14 @@ func (c *ExpenseUseCase) Reject(ctx context.Context, auth *model.Auth, expenseID
 		return nil, utils.Error(messages.InternalServerError, http.StatusInternalServerError, err)
 	}
 
+	previousStatus := expense.Status
 	expense.Status = constants.ExpenseStatusRejected
 	if err := c.ExpenseRepository.Update(tx, expense); err != nil {
 		c.Log.Warnf("Failed to update expense: %+v", err)
+		return nil, utils.Error(messages.InternalServerError, http.StatusInternalServerError, err)
+	}
+	if err := c.recordStatusChange(tx, expense, &auth.UserID, previousStatus, expense.Status, approval.Notes); err != nil {
+		c.Log.Warnf("Failed to create expense history: %+v", err)
 		return nil, utils.Error(messages.InternalServerError, http.StatusInternalServerError, err)
 	}
 
@@ -261,8 +278,11 @@ func (c *ExpenseUseCase) ProcessPayment(ctx context.Context, job model.PaymentJo
 		return utils.Error(messages.ErrPaymentFailed, http.StatusBadGateway, nil)
 	}
 
+	tx := c.DB.WithContext(ctx).Begin()
+	defer tx.Rollback()
+
 	expense := new(entity.Expense)
-	if err := c.DB.WithContext(ctx).Where("id = ?", job.ExpenseID).Take(expense).Error; err != nil {
+	if err := tx.Where("id = ?", job.ExpenseID).Take(expense).Error; err != nil {
 		return utils.Error(messages.ErrExpenseNotFound, http.StatusNotFound, err)
 	}
 
@@ -288,11 +308,21 @@ func (c *ExpenseUseCase) ProcessPayment(ctx context.Context, job model.PaymentJo
 	}
 
 	now := time.Now()
+	previousStatus := expense.Status
 	expense.Status = constants.ExpenseStatusCompleted
 	expense.ProcessedAt = &now
-	if err := c.DB.WithContext(ctx).Save(expense).Error; err != nil {
+	if err := tx.Save(expense).Error; err != nil {
 		c.Log.Warnf("Failed to update expense payment status: %+v", err)
 		return utils.Error(messages.InternalServerError, http.StatusInternalServerError, err)
+	}
+	if err := c.recordStatusChange(tx, expense, nil, previousStatus, expense.Status, ""); err != nil {
+		c.Log.Warnf("Failed to create expense history: %+v", err)
+		return utils.Error(messages.InternalServerError, http.StatusInternalServerError, err)
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		c.Log.Warnf("Failed to commit transaction: %+v", err)
+		return utils.Error(messages.ErrCommitTransaction, http.StatusInternalServerError, err)
 	}
 
 	return nil
@@ -337,4 +367,27 @@ func isManager(auth *model.Auth) bool {
 		return false
 	}
 	return auth.Role == constants.RoleManager
+}
+
+func (c *ExpenseUseCase) recordStatusChange(
+	tx *gorm.DB,
+	expense *entity.Expense,
+	actorID *uuid.UUID,
+	previousStatus string,
+	newStatus string,
+	notes string,
+) error {
+	if c.HistoryRepository == nil {
+		return nil
+	}
+
+	history := &entity.ExpenseStatusHistory{
+		ExpenseID:      expense.ID,
+		ActorID:        actorID,
+		PreviousStatus: previousStatus,
+		NewStatus:      newStatus,
+		Notes:          strings.TrimSpace(notes),
+	}
+
+	return c.HistoryRepository.Create(tx, history)
 }

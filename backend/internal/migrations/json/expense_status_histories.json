@@ -1,0 +1,37 @@
+[
+  {
+    "id": "c1111111-2222-3333-4444-555555555555",
+    "expense_id": "11111111-2222-3333-4444-555555555555",
+    "actor_id": "aaaa1111-bbbb-2222-cccc-333333333333",
+    "previous_status": "",
+    "new_status": "auto_approved",
+    "notes": "",
+    "created_at": "2025-01-05T08:30:00Z"
+  },
+  {
+    "id": "c6666666-7777-8888-9999-000000000000",
+    "expense_id": "66666666-7777-8888-9999-000000000000",
+    "actor_id": "bbbb1111-cccc-2222-dddd-444444444444",
+    "previous_status": "awaiting_approval",
+    "new_status": "approved",
+    "notes": "Approved for client meeting",
+    "created_at": "2025-01-06T11:00:00Z"
+  },
+  {
+    "id": "c9999999-aaaa-bbbb-cccc-dddddddddddd",
+    "expense_id": "99999999-aaaa-bbbb-cccc-dddddddddddd",
+    "actor_id": "bbbb1111-cccc-2222-dddd-444444444444",
+    "previous_status": "awaiting_approval",
+    "new_status": "approved",
+    "notes": "Approved for equipment purchase",
+    "created_at": "2025-01-07T09:55:00Z"
+  },
+  {
+    "id": "d9999999-aaaa-bbbb-cccc-dddddddddddd",
+    "expense_id": "99999999-aaaa-bbbb-cccc-dddddddddddd",
+    "previous_status": "approved",
+    "new_status": "completed",
+    "notes": "",
+    "created_at": "2025-01-07T10:05:00Z"
+  }
+]

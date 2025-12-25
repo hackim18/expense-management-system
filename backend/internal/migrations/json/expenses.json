@@ -14,7 +14,7 @@
     "amount_idr": 1500000,
     "description": "Client meeting lunch at Plaza Indonesia",
     "receipt_url": "https://example.com/receipt-2.jpg",
-    "status": "awaiting_approval",
+    "status": "approved",
     "submitted_at": "2025-01-06T10:15:00Z"
   },
   {
@@ -23,7 +23,7 @@
     "amount_idr": 5000000,
     "description": "Laptop purchase",
     "receipt_url": "https://example.com/receipt-3.jpg",
-    "status": "approved",
+    "status": "completed",
     "submitted_at": "2025-01-07T09:45:00Z",
     "processed_at": "2025-01-07T10:05:00Z"
   }

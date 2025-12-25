@@ -32,6 +32,7 @@ func Bootstrap(config *BootstrapConfig) {
 	userRepository := repository.NewUserRepository(config.Log)
 	expenseRepository := repository.NewExpenseRepository(config.Log)
 	approvalRepository := repository.NewApprovalRepository(config.Log)
+	historyRepository := repository.NewExpenseStatusHistoryRepository(config.Log)
 
 	paymentBaseURL := config.Config.GetString("PAYMENT_BASE_URL")
 	paymentTimeout := time.Duration(config.Config.GetInt("PAYMENT_TIMEOUT_SECONDS")) * time.Second
@@ -48,6 +49,7 @@ func Bootstrap(config *BootstrapConfig) {
 		config.Log,
 		expenseRepository,
 		approvalRepository,
+		historyRepository,
 		nil,
 		paymentClient,
 	)
