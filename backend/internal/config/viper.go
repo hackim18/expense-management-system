@@ -30,6 +30,8 @@ func NewViper() *viper.Viper {
 	config.SetDefault("PAYMENT_QUEUE_BUFFER", 100)
 	config.SetDefault("CORS_ALLOW_ORIGINS", "*")
 	config.SetDefault("CORS_ALLOW_CREDENTIALS", false)
+	config.SetDefault("RATE_LIMIT", "100-M")
+	config.SetDefault("RATE_LIMIT_EXCLUDE_PATHS", "/health,/api/health,/api/metrics,/api/openapi.yaml,/swagger/*")
 
 	config.SetConfigFile(".env")
 
