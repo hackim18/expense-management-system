@@ -2,9 +2,9 @@ package route
 
 import "github.com/gin-gonic/gin"
 
-func (c *RouteConfig) RegisterUserRoutes(rg *gin.RouterGroup) {
-	user := rg.Group("/users")
+func (c *RouteConfig) RegisterAuthRoutes(rg *gin.RouterGroup) {
+	auth := rg.Group("/auth")
 
-	user.POST("/register", c.UserController.Register)
-	user.POST("/login", c.UserController.Login)
+	auth.POST("/register", c.UserController.Register)
+	auth.POST("/login", c.UserController.Login)
 }

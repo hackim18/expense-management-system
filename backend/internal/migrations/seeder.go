@@ -2,6 +2,7 @@ package migrations
 
 import (
 	"encoding/json"
+	"go-expense-management-system/internal/constants"
 	"go-expense-management-system/internal/entity"
 	"os"
 
@@ -32,6 +33,9 @@ func seedFromJSON[T any](filePath string, out *[]T, db *gorm.DB, log *logrus.Log
 
 	if users, ok := any(out).(*[]entity.User); ok {
 		for i := range *users {
+			if (*users)[i].Role == "" {
+				(*users)[i].Role = constants.RoleEmployee
+			}
 			if (*users)[i].PasswordHash == "" {
 				hash, _ := bcrypt.GenerateFromPassword([]byte("12345678"), bcrypt.DefaultCost)
 				(*users)[i].PasswordHash = string(hash)

@@ -7,14 +7,16 @@ import (
 )
 
 type RouteConfig struct {
-	Router         *gin.Engine
-	UserController *http.UserController
-	AuthMiddleware gin.HandlerFunc
+	Router            *gin.Engine
+	UserController    *http.UserController
+	ExpenseController *http.ExpenseController
+	AuthMiddleware    gin.HandlerFunc
 }
 
 func (c *RouteConfig) Setup() {
 	api := c.Router.Group("/api")
 
-	c.RegisterUserRoutes(api)
+	c.RegisterAuthRoutes(api)
+	c.RegisterExpenseRoutes(api)
 	c.RegisterCommonRoutes(c.Router)
 }

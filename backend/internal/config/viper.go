@@ -22,7 +22,12 @@ func NewViper() *viper.Viper {
 	config.SetDefault("JWT_ISSUER", "go-issuer")
 	config.SetDefault("JWT_AUDIENCE", "go-audience")
 	config.SetDefault("JWT_EXPIRES_MINUTES", 1440)
-	config.SetDefault("DROP_TABLE_NAMES", "users")
+	config.SetDefault("DROP_TABLE_NAMES", "users,expenses,approvals")
+	config.SetDefault("PAYMENT_BASE_URL", "https://1620e98f-7759-431c-a2aa-f449d591150b.mock.pstmn.io")
+	config.SetDefault("PAYMENT_TIMEOUT_SECONDS", 10)
+	config.SetDefault("PAYMENT_RETRY_COUNT", 3)
+	config.SetDefault("PAYMENT_RETRY_DELAY_SECONDS", 2)
+	config.SetDefault("PAYMENT_QUEUE_BUFFER", 100)
 
 	config.SetConfigFile(".env")
 

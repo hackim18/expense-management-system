@@ -32,10 +32,11 @@ func NewJWT(v *viper.Viper) *JWTHelper {
 
 type AccessClaims struct {
 	Email string `json:"email"`
+	Role  string `json:"role"`
 	jwt.RegisteredClaims
 }
 
-func (j *JWTHelper) GenerateAccessToken(id uuid.UUID, email string) (string, error) {
+func (j *JWTHelper) GenerateAccessToken(id uuid.UUID, email string, role string) (string, error) {
 	if len(j.secret) == 0 {
 		return "", errors.New("jwt secret is empty")
 	}
@@ -43,6 +44,7 @@ func (j *JWTHelper) GenerateAccessToken(id uuid.UUID, email string) (string, err
 	now := time.Now()
 	claims := AccessClaims{
 		Email: email,
+		Role:  role,
 		RegisteredClaims: jwt.RegisteredClaims{
 			Subject:   id.String(),
 			Issuer:    j.issuer,

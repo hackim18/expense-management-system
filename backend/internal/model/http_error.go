@@ -34,6 +34,7 @@ func (e *HTTPError) Unwrap() error {
 var (
 	ErrBadRequest          = NewHTTPError(nethttp.StatusBadRequest, messages.FailedInputFormat)
 	ErrUnauthorized        = NewHTTPError(nethttp.StatusUnauthorized, messages.Unauthorized)
+	ErrForbidden           = NewHTTPError(nethttp.StatusForbidden, messages.Forbidden)
 	ErrNotFound            = NewHTTPError(nethttp.StatusNotFound, messages.StatusNotFound)
 	ErrConflict            = NewHTTPError(nethttp.StatusConflict, messages.ConflictError)
 	ErrInternalServerError = NewHTTPError(nethttp.StatusInternalServerError, messages.InternalServerError)

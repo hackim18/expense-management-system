@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"go-expense-management-system/internal/constants"
 	"go-expense-management-system/internal/entity"
 	"go-expense-management-system/internal/messages"
 	"go-expense-management-system/internal/model"
@@ -60,8 +61,14 @@ func (c *UserUseCase) Verify(ctx context.Context, request *model.VerifyUserReque
 		return nil, utils.Error(messages.InvalidToken, http.StatusUnauthorized, err)
 	}
 
+	role := claims.Role
+	if role == "" {
+		role = constants.RoleEmployee
+	}
+
 	return &model.Auth{
 		UserID: userID,
+		Role:   role,
 	}, nil
 }
 
@@ -88,6 +95,7 @@ func (c *UserUseCase) Create(ctx context.Context, request *model.RegisterUserReq
 	user := &entity.User{
 		Name:         request.Name,
 		Email:        request.Email,
+		Role:         constants.RoleEmployee,
 		PasswordHash: string(password),
 	}
 
@@ -124,7 +132,7 @@ func (c *UserUseCase) Login(ctx context.Context, request *model.LoginUserRequest
 		return nil, utils.Error(messages.ErrGenerateAccessToken, http.StatusInternalServerError, nil)
 	}
 
-	accessToken, err := c.JWT.GenerateAccessToken(user.ID, user.Email)
+	accessToken, err := c.JWT.GenerateAccessToken(user.ID, user.Email, user.Role)
 	if err != nil {
 		c.Log.Warnf("Failed to generate access token : %+v", err)
 		return nil, utils.Error(messages.ErrGenerateAccessToken, http.StatusInternalServerError, err)

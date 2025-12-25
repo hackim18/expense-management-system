@@ -8,6 +8,7 @@ type UserResponse struct {
 	ID          *uuid.UUID `json:"id,omitempty"`
 	Name        string     `json:"name,omitempty"`
 	Email       string     `json:"email,omitempty"`
+	Role        string     `json:"role,omitempty"`
 	AccessToken string     `json:"access_token,omitempty"`
 }
 

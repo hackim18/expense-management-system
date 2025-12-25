@@ -13,6 +13,7 @@ const (
 	ErrInvalidIDFormat       = "Invalid ID format"
 	ConflictError            = "Resource conflict"
 	StatusNotFound           = "Resource not found"
+	Forbidden                = "Forbidden access"
 )
 
 const (
@@ -24,4 +25,9 @@ const (
 	ErrCreateUser             = "Failed to create user"
 	ErrCommitTransaction      = "Failed to commit transaction"
 	ErrUserNotFound           = "User not found"
+	ErrExpenseNotFound        = "Expense not found"
+	ErrInvalidExpenseAmount   = "Invalid expense amount"
+	ErrExpenseNotPending      = "Expense is not awaiting approval"
+	ErrExpenseAlreadyDone     = "Expense already processed"
+	ErrPaymentFailed          = "Payment processing failed"
 )

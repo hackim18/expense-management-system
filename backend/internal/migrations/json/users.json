@@ -3,6 +3,14 @@
     "id": "aaaa1111-bbbb-2222-cccc-333333333333",
     "name": "John",
     "email": "john@mail.com",
+    "role": "employee",
+    "password": "12345678"
+  },
+  {
+    "id": "bbbb1111-cccc-2222-dddd-444444444444",
+    "name": "Manager",
+    "email": "manager@mail.com",
+    "role": "manager",
     "password": "12345678"
   }
 ]
