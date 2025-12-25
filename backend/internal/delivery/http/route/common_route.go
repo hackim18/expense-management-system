@@ -6,10 +6,13 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-func (c *RouteConfig) RegisterCommonRoutes(app *gin.Engine) {
+func (c *RouteConfig) RegisterApiRoutes(api *gin.RouterGroup) {
 	startTime := time.Now()
+	openAPIPath := "api/openapi.yaml"
 	welcomeHandler := func(ctx *gin.Context) {
 		res := gin.H{"message": messages.WelcomeMessage}
 		ctx.JSON(http.StatusOK, res)
@@ -26,11 +29,29 @@ func (c *RouteConfig) RegisterCommonRoutes(app *gin.Engine) {
 		ctx.JSON(http.StatusOK, res)
 	}
 
+	api.GET("", welcomeHandler)
+	api.GET("/health", healthHandler)
+	api.GET("/openapi.yaml", func(ctx *gin.Context) {
+		ctx.File(openAPIPath)
+	})
+	api.GET("/metrics", metricsHandler)
+}
+
+func (c *RouteConfig) RegisterPublicRoutes() {
+	welcomeHandler := func(ctx *gin.Context) {
+		res := gin.H{"message": messages.WelcomeMessage}
+		ctx.JSON(http.StatusOK, res)
+	}
+
+	healthHandler := func(ctx *gin.Context) {
+		res := gin.H{"status": "ok"}
+		ctx.JSON(http.StatusOK, res)
+	}
+
+	app := c.Router
 	app.GET("/", welcomeHandler)
-	app.GET("/api", welcomeHandler)
 	app.GET("/health", healthHandler)
-	app.GET("/api/health", healthHandler)
-	app.GET("/api/metrics", metricsHandler)
+	app.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, ginSwagger.URL("/api/openapi.yaml")))
 	app.NoRoute(func(ctx *gin.Context) {
 		res := gin.H{"message": messages.NotFound}
 		ctx.AbortWithStatusJSON(http.StatusNotFound, res)

@@ -18,5 +18,6 @@ func (c *RouteConfig) Setup() {
 
 	c.RegisterAuthRoutes(api)
 	c.RegisterExpenseRoutes(api)
-	c.RegisterCommonRoutes(c.Router)
+	c.RegisterApiRoutes(api)
+	c.RegisterPublicRoutes()
 }
