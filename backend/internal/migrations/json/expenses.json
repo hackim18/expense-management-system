@@ -1,0 +1,30 @@
+[
+  {
+    "id": "11111111-2222-3333-4444-555555555555",
+    "user_id": "aaaa1111-bbbb-2222-cccc-333333333333",
+    "amount_idr": 250000,
+    "description": "Office supplies",
+    "receipt_url": "https://example.com/receipt-1.jpg",
+    "status": "auto_approved",
+    "submitted_at": "2025-01-05T08:30:00Z"
+  },
+  {
+    "id": "66666666-7777-8888-9999-000000000000",
+    "user_id": "aaaa1111-bbbb-2222-cccc-333333333333",
+    "amount_idr": 1500000,
+    "description": "Client meeting lunch at Plaza Indonesia",
+    "receipt_url": "https://example.com/receipt-2.jpg",
+    "status": "awaiting_approval",
+    "submitted_at": "2025-01-06T10:15:00Z"
+  },
+  {
+    "id": "99999999-aaaa-bbbb-cccc-dddddddddddd",
+    "user_id": "aaaa1111-bbbb-2222-cccc-333333333333",
+    "amount_idr": 5000000,
+    "description": "Laptop purchase",
+    "receipt_url": "https://example.com/receipt-3.jpg",
+    "status": "approved",
+    "submitted_at": "2025-01-07T09:45:00Z",
+    "processed_at": "2025-01-07T10:05:00Z"
+  }
+]
