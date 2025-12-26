@@ -9,18 +9,18 @@
         <h1
           class="max-w-2xl text-4xl font-bold leading-tight md:text-5xl lg:text-6xl text-balance"
         >
-          Kendalikan biaya, tetap gesit.
+          Mulai kelola expense dengan rapi.
         </h1>
         <p class="max-w-xl text-base-content/70 text-balance">
-          Masuk untuk mengajukan expense, memantau status, dan mempercepat
-          persetujuan di seluruh tim.
+          Buat akun employee untuk mengajukan expense, memantau status, dan
+          berkolaborasi dengan manager.
         </p>
         <div
           class="stats stats-vertical border border-base-200/70 bg-base-100/80 shadow-soft backdrop-blur lg:stats-horizontal"
         >
           <div class="stat">
-            <div class="stat-title">IDR Native</div>
-            <div class="stat-value text-primary">Rp</div>
+            <div class="stat-title">Transparan</div>
+            <div class="stat-value text-primary">IDR</div>
             <div class="stat-desc">Format rupiah otomatis.</div>
           </div>
           <div class="stat">
@@ -36,13 +36,24 @@
       >
         <div class="card-body gap-6">
           <div class="space-y-2">
-            <h2 class="card-title text-2xl">Masuk</h2>
+            <h2 class="card-title text-2xl">Daftar</h2>
             <p class="text-sm text-base-content/70">
-              Gunakan akun employee atau manager yang sudah disediakan.
+              Isi data berikut untuk membuat akun baru.
             </p>
           </div>
 
-          <form class="grid gap-4" @submit.prevent="handleLogin">
+          <form class="grid gap-4" @submit.prevent="handleRegister">
+            <label class="form-control">
+              <div class="label">
+                <span class="label-text">Nama</span>
+              </div>
+              <input
+                v-model="form.name"
+                type="text"
+                class="input input-bordered w-full"
+                placeholder="Nama lengkap"
+              />
+            </label>
             <label class="form-control">
               <div class="label">
                 <span class="label-text">Email</span>
@@ -69,24 +80,21 @@
             <div v-if="error" class="alert alert-error text-sm">
               {{ error }}
             </div>
+            <div v-if="success" class="alert alert-success text-sm">
+              {{ success }}
+            </div>
 
             <button class="btn btn-primary w-full" :disabled="loading">
-              {{ loading ? 'Memproses...' : 'Masuk' }}
+              {{ loading ? 'Memproses...' : 'Buat Akun' }}
             </button>
           </form>
-
-          <div class="divider">Demo login</div>
-          <div class="rounded-box bg-base-200/70 p-3 text-xs text-base-content/70">
-            <p>Employee: john@mail.com / 12345678</p>
-            <p>Manager: manager@mail.com / 12345678</p>
-          </div>
 
           <div
             class="flex flex-col gap-2 rounded-box bg-base-200/70 p-3 text-sm text-base-content/80 sm:flex-row sm:items-center sm:justify-between"
           >
-            <span class="font-medium">Belum punya akun?</span>
-            <NuxtLink to="/register" class="btn btn-outline btn-sm">
-              Daftar
+            <span class="font-medium">Sudah punya akun?</span>
+            <NuxtLink to="/login" class="btn btn-outline btn-sm">
+              Masuk
             </NuxtLink>
           </div>
         </div>
@@ -104,11 +112,13 @@ const auth = useAuth()
 const { request } = useApi()
 
 const form = reactive({
+  name: '',
   email: '',
   password: ''
 })
 const loading = ref(false)
 const error = ref('')
+const success = ref('')
 
 onMounted(() => {
   auth.init()
@@ -117,26 +127,32 @@ onMounted(() => {
   }
 })
 
-const handleLogin = async () => {
+const handleRegister = async () => {
   error.value = ''
+  success.value = ''
+
+  if (!form.name.trim() || !form.email.trim() || !form.password) {
+    error.value = 'Mohon lengkapi semua field.'
+    return
+  }
+  if (form.password.length < 8) {
+    error.value = 'Password minimal 8 karakter.'
+    return
+  }
+
   loading.value = true
   try {
-    const data = await request<{
-      id: string
-      name: string
-      email: string
-      role: string
-      access_token: string
-    }>('/api/auth/login', {
+    await request('/api/auth/register', {
       method: 'POST',
       body: form,
       auth: false
     })
-
-    auth.setAuth(data)
-    navigateTo('/expenses')
+    success.value = 'Akun berhasil dibuat. Silakan login.'
+    form.name = ''
+    form.email = ''
+    form.password = ''
   } catch (err) {
-    error.value = err instanceof Error ? err.message : 'Gagal login'
+    error.value = err instanceof Error ? err.message : 'Gagal mendaftar'
   } finally {
     loading.value = false
   }
