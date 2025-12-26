@@ -79,6 +79,42 @@
             </div>
           </div>
         </div>
+
+        <div v-if="paging" class="flex flex-col gap-3 rounded-box border border-base-200/80 bg-base-100/90 px-4 py-3 shadow-sm md:flex-row md:items-center md:justify-between">
+          <div class="text-sm text-base-content/70">
+            Menampilkan
+            <span class="font-semibold text-base-content">{{ rangeStart }}</span>
+            -
+            <span class="font-semibold text-base-content">{{ rangeEnd }}</span>
+            dari
+            <span class="font-semibold text-base-content">{{ totalItem }}</span>
+            pengajuan
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <button class="btn btn-sm btn-outline" :disabled="!paging.has_previous" @click="goToPage(page - 1)">
+              Sebelumnya
+            </button>
+            <div class="join">
+              <button
+                v-for="pageNumber in visiblePages"
+                :key="pageNumber"
+                class="btn btn-sm join-item"
+                :class="pageNumber === page ? 'btn-primary' : 'btn-outline'"
+                @click="goToPage(pageNumber)"
+              >
+                {{ pageNumber }}
+              </button>
+            </div>
+            <button class="btn btn-sm btn-outline" :disabled="!paging.has_next" @click="goToPage(page + 1)">
+              Berikutnya
+            </button>
+            <select class="select select-sm select-bordered" :value="pageSize" @change="changePageSize($event)">
+              <option v-for="size in pageSizeOptions" :key="size" :value="size">
+                {{ size }} / halaman
+              </option>
+            </select>
+          </div>
+        </div>
       </template>
 
       <div v-else class="card border border-base-200/80 bg-base-100/90 shadow-sm">
@@ -105,13 +141,26 @@ type Expense = {
   submitted_at: string;
 };
 
-const { request } = useApi();
+type PageMetadata = {
+  current_page: number;
+  page_size: number;
+  total_item: number;
+  total_page: number;
+  has_next: boolean;
+  has_previous: boolean;
+};
+
+const { requestWithMeta } = useApi();
 const { format: formatIdr } = useIdr();
 
 const expenses = ref<Expense[]>([]);
+const paging = ref<PageMetadata | null>(null);
 const loading = ref(false);
 const error = ref("");
 const selectedStatus = ref("");
+const page = ref(1);
+const pageSize = ref(5);
+const pageSizeOptions = [5, 10, 20, 50];
 
 const statusOptions = [
   { label: "Semua", value: "" },
@@ -126,11 +175,19 @@ const fetchExpenses = async () => {
   loading.value = true;
   error.value = "";
   try {
-    const query = selectedStatus.value ? `?status=${encodeURIComponent(selectedStatus.value)}` : "";
-    const data = await request<Expense[]>(`/api/expenses${query}`);
-    expenses.value = data || [];
+    const query = new URLSearchParams({
+      page: String(page.value),
+      size: String(pageSize.value),
+    });
+    if (selectedStatus.value) {
+      query.set("status", selectedStatus.value);
+    }
+    const payload = await requestWithMeta<Expense[], PageMetadata>(`/api/expenses?${query.toString()}`);
+    expenses.value = payload.data || [];
+    paging.value = payload.paging || null;
   } catch (err) {
     error.value = err instanceof Error ? err.message : "Gagal memuat data";
+    paging.value = null;
   } finally {
     loading.value = false;
   }
@@ -138,8 +195,45 @@ const fetchExpenses = async () => {
 
 const changeStatus = (value: string) => {
   selectedStatus.value = value;
+  page.value = 1;
   fetchExpenses();
 };
+
+const changePageSize = (event: Event) => {
+  const target = event.target as HTMLSelectElement | null;
+  const nextSize = target ? Number(target.value) : pageSize.value;
+  if (!Number.isNaN(nextSize) && nextSize > 0) {
+    pageSize.value = nextSize;
+    page.value = 1;
+    fetchExpenses();
+  }
+};
+
+const goToPage = (nextPage: number) => {
+  const total = paging.value?.total_page ?? 1;
+  if (nextPage < 1 || nextPage > Math.max(1, total)) {
+    return;
+  }
+  page.value = nextPage;
+  fetchExpenses();
+};
+
+const totalItem = computed(() => paging.value?.total_item ?? expenses.value.length);
+const rangeStart = computed(() => (expenses.value.length ? (page.value - 1) * pageSize.value + 1 : 0));
+const rangeEnd = computed(() => (expenses.value.length ? (page.value - 1) * pageSize.value + expenses.value.length : 0));
+const totalPages = computed(() => Math.max(1, paging.value?.total_page ?? 1));
+const visiblePages = computed(() => {
+  const total = totalPages.value;
+  const current = page.value;
+  const delta = 2;
+  const start = Math.max(1, current - delta);
+  const end = Math.min(total, current + delta);
+  const pages: number[] = [];
+  for (let i = start; i <= end; i += 1) {
+    pages.push(i);
+  }
+  return pages;
+});
 
 const formatDate = (value: string) => {
   if (!value) return "-";

@@ -5,12 +5,19 @@ type RequestOptions = {
   auth?: boolean;
 };
 
+type ApiResponse<T, P = unknown> = {
+  message?: string;
+  data?: T;
+  paging?: P;
+  errors?: string;
+};
+
 export const useApi = () => {
   const config = useRuntimeConfig();
   const auth = useAuth();
   const apiBase = config.public?.apiBase || "http://localhost:8080";
 
-  const request = async <T>(path: string, options: RequestOptions = {}) => {
+  const requestWithMeta = async <T, P = unknown>(path: string, options: RequestOptions = {}) => {
     if (import.meta.client) {
       auth.init();
     }
@@ -38,8 +45,16 @@ export const useApi = () => {
       throw new Error(message);
     }
 
-    return (payload?.data ?? payload) as T;
+    return (payload ?? {}) as ApiResponse<T, P>;
   };
 
-  return { request };
+  const request = async <T>(path: string, options: RequestOptions = {}) => {
+    const payload = await requestWithMeta<T>(path, options);
+    if (payload && typeof payload === "object" && "data" in payload) {
+      return (payload.data ?? null) as T;
+    }
+    return payload as unknown as T;
+  };
+
+  return { request, requestWithMeta };
 };
