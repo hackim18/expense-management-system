@@ -2,77 +2,41 @@
 
 Nuxt frontend using TailwindCSS + DaisyUI.
 
+## Features
+- Login and register
+- Expense dashboard with status filters and pagination
+- Expense submission form with IDR formatting and approval warning
+- Manager approval queue with approve/reject + notes
+- Responsive layout in Indonesian
+
 ## Setup
-
-Make sure to install dependencies:
-
+Install dependencies:
 ```bash
-# npm
 npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
 ```
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
+Run dev server:
 ```bash
-# npm
 npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
+
+Open http://localhost:3000
 
 ## Environment
 - `NUXT_PUBLIC_API_BASE` (default `http://localhost:8080`)
 
 ## Production
-
-Build the application for production:
-
 ```bash
-# npm
 npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
 npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## Docker
+Use the root `docker-compose.yml` to run full stack:
+```bash
+docker compose up --build
+```
+
+## Notes
+- API base URL can be overridden with `NUXT_PUBLIC_API_BASE`.
+- Make sure backend is running before using the UI.
