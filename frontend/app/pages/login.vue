@@ -9,10 +9,10 @@
         <h1
           class="max-w-2xl text-4xl font-bold leading-tight md:text-5xl lg:text-6xl text-balance"
         >
-          Kendalikan biaya, tetap gesit.
+          Kendalikan pengeluaran, tetap gesit.
         </h1>
         <p class="max-w-xl text-base-content/70 text-balance">
-          Masuk untuk mengajukan expense, memantau status, dan mempercepat
+          Masuk untuk mengajukan pengeluaran, memantau status, dan mempercepat
           persetujuan di seluruh tim.
         </p>
         <div
@@ -24,9 +24,9 @@
             <div class="stat-desc">Format rupiah otomatis.</div>
           </div>
           <div class="stat">
-            <div class="stat-title">Approval Cepat</div>
+            <div class="stat-title">Persetujuan Cepat</div>
             <div class="stat-value text-secondary">1Jt+</div>
-            <div class="stat-desc">Masuk antrian manager.</div>
+            <div class="stat-desc">Masuk antrean manajer.</div>
           </div>
         </div>
       </div>
@@ -38,7 +38,7 @@
           <div class="space-y-2">
             <h2 class="card-title text-2xl">Masuk</h2>
             <p class="text-sm text-base-content/70">
-              Gunakan akun employee atau manager yang sudah disediakan.
+            Gunakan akun karyawan atau manajer yang sudah disediakan.
             </p>
           </div>
 
@@ -77,8 +77,8 @@
 
           <div class="divider">Demo login</div>
           <div class="rounded-box bg-base-200/70 p-3 text-xs text-base-content/70">
-            <p>Employee: john@mail.com / 12345678</p>
-            <p>Manager: manager@mail.com / 12345678</p>
+            <p>Karyawan: john@mail.com / 12345678</p>
+            <p>Manajer: manager@mail.com / 12345678</p>
           </div>
 
           <div

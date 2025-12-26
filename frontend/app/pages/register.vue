@@ -9,11 +9,11 @@
         <h1
           class="max-w-2xl text-4xl font-bold leading-tight md:text-5xl lg:text-6xl text-balance"
         >
-          Mulai kelola expense dengan rapi.
+          Mulai kelola pengeluaran dengan rapi.
         </h1>
         <p class="max-w-xl text-base-content/70 text-balance">
-          Buat akun employee untuk mengajukan expense, memantau status, dan
-          berkolaborasi dengan manager.
+          Buat akun karyawan untuk mengajukan pengeluaran, memantau status, dan
+          berkolaborasi dengan manajer.
         </p>
         <div
           class="stats stats-vertical border border-base-200/70 bg-base-100/80 shadow-soft backdrop-blur lg:stats-horizontal"
@@ -24,9 +24,9 @@
             <div class="stat-desc">Format rupiah otomatis.</div>
           </div>
           <div class="stat">
-            <div class="stat-title">Approval Cepat</div>
+            <div class="stat-title">Persetujuan Cepat</div>
             <div class="stat-value text-secondary">1Jt+</div>
-            <div class="stat-desc">Masuk antrian manager.</div>
+            <div class="stat-desc">Masuk antrean manajer.</div>
           </div>
         </div>
       </div>
