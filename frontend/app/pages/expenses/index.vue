@@ -29,7 +29,6 @@
     </div>
 
     <div v-else class="space-y-4">
-      <!-- Kalau ADA data -->
       <template v-if="expenses.length">
         <div class="hidden overflow-x-auto rounded-box border border-base-200/80 bg-base-100/90 shadow-sm lg:block">
           <table class="table table-zebra">
@@ -82,11 +81,10 @@
         </div>
       </template>
 
-      <!-- Kalau TIDAK ADA data: tampilkan HANYA ini -->
       <div v-else class="card border border-base-200/80 bg-base-100/90 shadow-sm">
         <div class="card-body text-center">
-          <p class="text-lg font-semibold">Belum ada pengajuan.</p>
-          <p class="text-sm text-base-content/70">Mulai ajukan expense pertama kamu hari ini.</p>
+          <p class="text-lg font-semibold">Tidak ada data untuk filter ini.</p>
+          <p class="text-sm text-base-content/70">Coba pilih status lain atau buat pengajuan baru.</p>
         </div>
       </div>
     </div>
