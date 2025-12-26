@@ -10,13 +10,16 @@ import (
 )
 
 type User struct {
-	ID           uuid.UUID `gorm:"type:char(36);primaryKey" json:"id"`
-	Name         string    `gorm:"type:varchar(100);not null" json:"name"`
-	Email        string    `gorm:"type:varchar(100);uniqueIndex;not null" json:"email"`
-	Role         string    `gorm:"type:varchar(20);not null;default:employee" json:"role"`
-	PasswordHash string    `gorm:"type:varchar(255);not null" json:"-"`
-	CreatedAt    time.Time `gorm:"column:created_at;autoCreateTime:milli" json:"created_at"`
-	UpdatedAt    time.Time `gorm:"column:updated_at;autoCreateTime:milli;autoUpdateTime:milli" json:"updated_at"`
+	ID           uuid.UUID              `gorm:"type:char(36);primaryKey" json:"id"`
+	Name         string                 `gorm:"type:varchar(100);not null" json:"name"`
+	Email        string                 `gorm:"type:varchar(100);uniqueIndex;not null" json:"email"`
+	Role         string                 `gorm:"type:varchar(20);not null;default:employee" json:"role"`
+	PasswordHash string                 `gorm:"type:varchar(255);not null" json:"-"`
+	CreatedAt    time.Time              `gorm:"column:created_at;autoCreateTime:milli" json:"created_at"`
+	UpdatedAt    time.Time              `gorm:"column:updated_at;autoCreateTime:milli;autoUpdateTime:milli" json:"updated_at"`
+	Expenses     []Expense              `gorm:"foreignKey:UserID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:RESTRICT" json:"-"`
+	Approvals    []Approval             `gorm:"foreignKey:ApproverID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:RESTRICT" json:"-"`
+	StatusLogs   []ExpenseStatusHistory `gorm:"foreignKey:ActorID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL" json:"-"`
 }
 
 func (u *User) TableName() string {

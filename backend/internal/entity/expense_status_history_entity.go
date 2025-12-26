@@ -15,6 +15,8 @@ type ExpenseStatusHistory struct {
 	NewStatus      string     `gorm:"type:varchar(30);not null" json:"new_status"`
 	Notes          string     `gorm:"type:text" json:"notes,omitempty"`
 	CreatedAt      time.Time  `gorm:"column:created_at;autoCreateTime:milli" json:"created_at"`
+	Expense        Expense    `gorm:"foreignKey:ExpenseID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE" json:"-"`
+	Actor          *User      `gorm:"foreignKey:ActorID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL" json:"-"`
 }
 
 func (e *ExpenseStatusHistory) TableName() string {

@@ -14,6 +14,8 @@ type Approval struct {
 	Status     string    `gorm:"type:varchar(30);not null" json:"status"`
 	Notes      string    `gorm:"type:text" json:"notes,omitempty"`
 	CreatedAt  time.Time `gorm:"column:created_at;autoCreateTime:milli" json:"created_at"`
+	Expense    Expense   `gorm:"foreignKey:ExpenseID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE" json:"-"`
+	Approver   User      `gorm:"foreignKey:ApproverID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:RESTRICT" json:"-"`
 }
 
 func (a *Approval) TableName() string {
