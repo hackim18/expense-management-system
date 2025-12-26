@@ -1,0 +1,67 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: expense_management
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    command: ["/app/server", "--migrate", "--seed", "--run"]
+    environment:
+      APP_NAME: expense-management
+      PORT: 8080
+      LOG_LEVEL: info
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: expense_management
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      JWT_SECRET: supersecret
+      JWT_ISSUER: go-issuer
+      JWT_AUDIENCE: go-audience
+      JWT_EXPIRES_MINUTES: 1440
+      PAYMENT_BASE_URL: https://1620e98f-7759-431c-a2aa-f449d591150b.mock.pstmn.io
+      PAYMENT_TIMEOUT_SECONDS: 10
+      PAYMENT_RETRY_COUNT: 3
+      PAYMENT_RETRY_DELAY_SECONDS: 2
+      PAYMENT_QUEUE_BUFFER: 100
+      CORS_ALLOW_ORIGINS: http://localhost:3000
+      CORS_ALLOW_CREDENTIALS: "false"
+      RATE_LIMIT: 100-M
+      RATE_LIMIT_EXCLUDE_PATHS: /health,/api/health,/api/metrics,/api/openapi.yaml,/swagger/*
+      SMTP_ENABLED: "false"
+      SMTP_HOST: ""
+      SMTP_PORT: 587
+      SMTP_USERNAME: ""
+      SMTP_PASSWORD: ""
+      SMTP_FROM_EMAIL: ""
+      SMTP_FROM_NAME: Expense Management
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    environment:
+      NODE_ENV: production
+      NITRO_HOST: 0.0.0.0
+      NITRO_PORT: 3000
+      NUXT_PUBLIC_API_BASE: http://localhost:8080
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
