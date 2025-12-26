@@ -123,7 +123,7 @@ const fetchQueue = async () => {
   loading.value = true
   error.value = ''
   try {
-    const data = await request<Expense[]>('/api/expenses?status=pending')
+    const data = await request<Expense[]>('/api/expenses?status=awaiting_approval')
     expenses.value = data || []
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Gagal memuat antrian'

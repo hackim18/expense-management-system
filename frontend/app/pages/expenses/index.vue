@@ -117,10 +117,10 @@ const selectedStatus = ref("");
 
 const statusOptions = [
   { label: "Semua", value: "" },
-  { label: "Pending", value: "pending" },
+  { label: "Pending", value: "awaiting_approval" },
   { label: "Approved", value: "approved" },
   { label: "Rejected", value: "rejected" },
-  { label: "Auto-approved", value: "auto-approved" },
+  { label: "Auto-approved", value: "auto_approved" },
   { label: "Completed", value: "completed" },
 ];
 

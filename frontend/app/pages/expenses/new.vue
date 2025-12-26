@@ -50,7 +50,16 @@
               <div class="label">
                 <span class="label-text">Upload Receipt</span>
               </div>
-              <input type="file" class="file-input file-input-bordered w-full" />
+              <input
+                type="file"
+                class="file-input file-input-bordered w-full"
+                @change="handleReceiptFile"
+              />
+              <div v-if="receiptFileName" class="label">
+                <span class="label-text-alt text-base-content/60">
+                  File dipilih: {{ receiptFileName }}
+                </span>
+              </div>
             </label>
             <label class="form-control">
               <div class="label">
@@ -103,6 +112,7 @@ const { formatInput } = useIdr()
 
 const amountInput = ref('')
 const amountValue = ref(0)
+const receiptFileName = ref('')
 const error = ref('')
 const success = ref('')
 const loading = ref(false)
@@ -122,6 +132,16 @@ const handleAmountInput = () => {
   form.amount_idr = value
 }
 
+const handleReceiptFile = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  const file = target.files?.[0]
+  receiptFileName.value = file?.name || ''
+
+  if (file && !form.receipt_url) {
+    form.receipt_url = `mock://${file.name}`
+  }
+}
+
 const handleSubmit = async () => {
   error.value = ''
   success.value = ''
@@ -135,6 +155,7 @@ const handleSubmit = async () => {
     success.value = 'Pengajuan berhasil dikirim.'
     amountInput.value = ''
     amountValue.value = 0
+    receiptFileName.value = ''
     form.amount_idr = 0
     form.description = ''
     form.receipt_url = ''
