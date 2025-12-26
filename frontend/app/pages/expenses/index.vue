@@ -3,10 +3,10 @@
     <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
       <div class="space-y-2">
         <div class="badge badge-outline">Dashboard</div>
-        <h2 class="text-3xl font-bold text-balance">Ringkasan Expense</h2>
+        <h2 class="text-3xl font-bold text-balance">Ringkasan Pengeluaran</h2>
         <p class="text-base-content/70 text-balance">Pantau pengajuanmu, filter status, dan cek detail terbaru.</p>
       </div>
-      <NuxtLink to="/expenses/new" class="btn btn-primary"> Ajukan Expense </NuxtLink>
+      <NuxtLink to="/expenses/new" class="btn btn-primary"> Ajukan Pengeluaran </NuxtLink>
     </div>
 
     <div class="card border border-base-200/80 bg-base-100/80 shadow-sm">
