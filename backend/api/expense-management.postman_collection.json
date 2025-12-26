@@ -1,0 +1,1214 @@
+{
+	"info": {
+		"_postman_id": "75259bd9-4f0a-4a86-aeb6-cbfc56d8fcd9",
+		"name": "Expense Management System API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33199697",
+		"_collection_link": "https://a44444-7251.postman.co/workspace/My-Project~1d89b93d-f4f7-4044-a9d0-52ac4c64f7df/collection/33199697-75259bd9-4f0a-4a86-aeb6-cbfc56d8fcd9?action=share&source=collection_link&creator=33199697"
+	},
+	"item": [
+		{
+			"name": "Health",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/health",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"health"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "200 OK",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/health",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"health"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 26 Dec 2025 18:20:18 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "15"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": \"ok\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Metrics",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/metrics",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"metrics"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "200 OK",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/metrics",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"metrics"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 26 Dec 2025 18:20:37 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "42"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": \"ok\",\n    \"uptime\": \"7m47.940221595s\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Auth - Register",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"John\",\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/auth/register",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "201 Created",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"John\",\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 26 Dec 2025 18:13:09 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "154"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"User registered successfully\",\n    \"data\": {\n        \"id\": \"3983ceeb-37f3-406f-adf0-ede3d3ce4006\",\n        \"name\": \"John\",\n        \"email\": \"john@example.com\",\n        \"role\": \"employee\"\n    }\n}"
+				},
+				{
+					"name": "409 Conflict",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"John\",\n  \"email\": \"john@mail.com\",\n  \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"status": "Conflict",
+					"code": 409,
+					"_postman_previewlanguage": "",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 26 Dec 2025 18:13:26 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "48"
+						}
+					],
+					"cookie": [
+						{
+							"expires": "Invalid Date",
+							"domain": "",
+							"path": ""
+						}
+					],
+					"body": "{\n    \"errors\": \"User with this email already exists\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Auth - Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var json = pm.response.json();",
+							"if (json && json.data && json.data.access_token) {",
+							"  pm.collectionVariables.set('token', json.data.access_token);",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"manager@mail.com\",\n//   \"email\": \"john@mail.com\",\n  \"password\": \"12345678\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/auth/login",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "200 OK",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"manager@mail.com\",\n//   \"email\": \"john@mail.com\",\n  \"password\": \"12345678\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 26 Dec 2025 18:14:09 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "473"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"User logged in successfully\",\n    \"data\": {\n        \"id\": \"bbbb1111-cccc-2222-dddd-444444444444\",\n        \"name\": \"Manager\",\n        \"email\": \"manager@mail.com\",\n        \"role\": \"manager\",\n        \"access_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hbmFnZXJAbWFpbC5jb20iLCJyb2xlIjoibWFuYWdlciIsImlzcyI6ImdvLWlzc3VlciIsInN1YiI6ImJiYmIxMTExLWNjY2MtMjIyMi1kZGRkLTQ0NDQ0NDQ0NDQ0NCIsImF1ZCI6WyJnby1hdWRpZW5jZSJdLCJleHAiOjE3NjY4NTkyNDksImlhdCI6MTc2Njc3Mjg0OX0.QtxiyP5CCt_FYTtL9tbVx7c4jXhAsC41yxd99MouWog\"\n    }\n}"
+				},
+				{
+					"name": "401 Unauthorized",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"manager@mail.com\",\n//   \"email\": \"john@mail.com\",\n  \"password\": \"123456789\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"status": "Unauthorized",
+					"code": 401,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 26 Dec 2025 18:14:34 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "38"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"errors\": \"Invalid email or password\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Expenses - Create (Auto-approved)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var json = pm.response.json();",
+							"if (json && json.data && json.data.id) {",
+							"  pm.collectionVariables.set('expense_id', json.data.id);",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"amount_idr\": 750000,\n  \"description\": \"Office supplies\",\n  \"receipt_url\": \"https://example.com/receipt.jpg\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/expenses",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"expenses"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "201 Created",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount_idr\": 750000,\n  \"description\": \"Office supplies\",\n  \"receipt_url\": \"https://example.com/receipt.jpg\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/expenses",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"expenses"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 26 Dec 2025 18:14:58 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "353"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Expense submitted successfully\",\n    \"data\": {\n        \"id\": \"84168625-10a0-43b3-9ead-4901db0446b9\",\n        \"amount_idr\": 750000,\n        \"amount_idr_formatted\": \"Rp 750.000\",\n        \"description\": \"Office supplies\",\n        \"receipt_url\": \"https://example.com/receipt.jpg\",\n        \"status\": \"auto_approved\",\n        \"requires_approval\": false,\n        \"auto_approved\": true,\n        \"submitted_at\": \"2025-12-26T18:14:58.688006856Z\"\n    }\n}"
+				},
+				{
+					"name": "400 Bad Request",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount_idr\": 999999999,\n  \"description\": \"Office supplies\",\n  \"receipt_url\": \"https://example.com/receipt.jpg\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/expenses",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"expenses"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 26 Dec 2025 18:15:21 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "35"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"errors\": \"Invalid expense amount\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Expenses - Create (Requires Approval)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"amount_idr\": 1500000,\n  \"description\": \"Client meeting lunch at Plaza Indonesia\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/expenses",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"expenses"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "201 Created",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount_idr\": 1500000,\n  \"description\": \"Client meeting lunch at Plaza Indonesia\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/expenses",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"expenses"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 26 Dec 2025 18:15:40 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "336"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Expense submitted successfully\",\n    \"data\": {\n        \"id\": \"b241b43b-1704-409b-8ac6-b9b123cc5002\",\n        \"amount_idr\": 1500000,\n        \"amount_idr_formatted\": \"Rp 1.500.000\",\n        \"description\": \"Client meeting lunch at Plaza Indonesia\",\n        \"status\": \"awaiting_approval\",\n        \"requires_approval\": true,\n        \"auto_approved\": false,\n        \"submitted_at\": \"2025-12-26T18:15:40.919684735Z\"\n    }\n}"
+				},
+				{
+					"name": "400 Bad Request",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount_idr\": 999999999,\n  \"description\": \"Client meeting lunch at Plaza Indonesia\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/expenses",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"expenses"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 26 Dec 2025 18:16:02 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "35"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"errors\": \"Invalid expense amount\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Expenses - List",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/expenses?status=pending&page=1&size=10",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"expenses"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "pending"
+						},
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "size",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "200 OK",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/expenses?status=pending&page=1&size=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"expenses"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "pending"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 26 Dec 2025 18:16:24 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "496"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Expenses retrieved successfully\",\n    \"data\": [\n        {\n            \"id\": \"b241b43b-1704-409b-8ac6-b9b123cc5002\",\n            \"user_id\": \"bbbb1111-cccc-2222-dddd-444444444444\",\n            \"amount_idr\": 1500000,\n            \"amount_idr_formatted\": \"Rp 1.500.000\",\n            \"description\": \"Client meeting lunch at Plaza Indonesia\",\n            \"status\": \"awaiting_approval\",\n            \"requires_approval\": true,\n            \"auto_approved\": false,\n            \"submitted_at\": \"2025-12-26T18:15:40.919684Z\"\n        }\n    ],\n    \"paging\": {\n        \"current_page\": 1,\n        \"page_size\": 10,\n        \"total_item\": 1,\n        \"total_page\": 1,\n        \"has_next\": false,\n        \"has_previous\": false\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Expenses - Get Detail",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/expenses/{{expense_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"expenses",
+						"{{expense_id}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "200 OK",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/expenses/{{expense_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"expenses",
+								"{{expense_id}}"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 26 Dec 2025 18:16:41 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "440"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Expense retrieved successfully\",\n    \"data\": {\n        \"id\": \"84168625-10a0-43b3-9ead-4901db0446b9\",\n        \"user_id\": \"bbbb1111-cccc-2222-dddd-444444444444\",\n        \"amount_idr\": 750000,\n        \"amount_idr_formatted\": \"Rp 750.000\",\n        \"description\": \"Office supplies\",\n        \"receipt_url\": \"https://example.com/receipt.jpg\",\n        \"status\": \"completed\",\n        \"requires_approval\": false,\n        \"auto_approved\": true,\n        \"submitted_at\": \"2025-12-26T18:14:58.688006Z\",\n        \"processed_at\": \"2025-12-26T18:15:00.044415Z\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Expenses - History",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/expenses/{{expense_id}}/history",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"expenses",
+						"{{expense_id}}",
+						"history"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "200 OK",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/expenses/{{expense_id}}/history",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"expenses",
+								"{{expense_id}}",
+								"history"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 26 Dec 2025 18:16:56 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "481"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Expense history retrieved successfully\",\n    \"data\": [\n        {\n            \"id\": \"07a6b40e-9109-4886-850f-7ed4b90aab80\",\n            \"expense_id\": \"84168625-10a0-43b3-9ead-4901db0446b9\",\n            \"actor_id\": \"bbbb1111-cccc-2222-dddd-444444444444\",\n            \"new_status\": \"auto_approved\",\n            \"created_at\": \"2025-12-26T18:14:58.691872Z\"\n        },\n        {\n            \"id\": \"a36c2faa-862f-4256-8f1f-78ebb11333b2\",\n            \"expense_id\": \"84168625-10a0-43b3-9ead-4901db0446b9\",\n            \"previous_status\": \"auto_approved\",\n            \"new_status\": \"completed\",\n            \"created_at\": \"2025-12-26T18:15:00.086964Z\"\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Expenses - Approve",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"notes\": \"Approved\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/expenses/{{expense_id}}/approve",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"expenses",
+						"{{expense_id}}",
+						"approve"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "200 OK",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"notes\": \"Approved\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/expenses/{{expense_id}}/approve",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"expenses",
+								"{{expense_id}}",
+								"approve"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 26 Dec 2025 18:17:43 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "372"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Expense approved successfully\",\n    \"data\": {\n        \"id\": \"b241b43b-1704-409b-8ac6-b9b123cc5002\",\n        \"user_id\": \"bbbb1111-cccc-2222-dddd-444444444444\",\n        \"amount_idr\": 1500000,\n        \"amount_idr_formatted\": \"Rp 1.500.000\",\n        \"description\": \"Client meeting lunch at Plaza Indonesia\",\n        \"status\": \"approved\",\n        \"requires_approval\": true,\n        \"auto_approved\": false,\n        \"submitted_at\": \"2025-12-26T18:15:40.919684Z\"\n    }\n}"
+				},
+				{
+					"name": "409 Conflict",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"notes\": \"Approved\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/expenses/{{expense_id}}/approve",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"expenses",
+								"{{expense_id}}",
+								"approve"
+							]
+						}
+					},
+					"status": "Conflict",
+					"code": 409,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 26 Dec 2025 18:17:58 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "45"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"errors\": \"Expense is not awaiting approval\"\n}"
+				},
+				{
+					"name": "404 Not Found",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"notes\": \"Approved\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/expenses/{{expense_id}}/approve",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"expenses",
+								"{{expense_id}}",
+								"approve"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 26 Dec 2025 18:18:21 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "30"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"errors\": \"Expense not found\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Expenses - Reject",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"notes\": \"Rejected\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/expenses/{{expense_id}}/reject",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"expenses",
+						"{{expense_id}}",
+						"reject"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "200 OK",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"notes\": \"Rejected\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/expenses/{{expense_id}}/reject",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"expenses",
+								"{{expense_id}}",
+								"reject"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 26 Dec 2025 18:19:19 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "372"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Expense rejected successfully\",\n    \"data\": {\n        \"id\": \"24ecc0df-c1b4-4bf4-83d4-d48699e852b2\",\n        \"user_id\": \"bbbb1111-cccc-2222-dddd-444444444444\",\n        \"amount_idr\": 1500000,\n        \"amount_idr_formatted\": \"Rp 1.500.000\",\n        \"description\": \"Client meeting lunch at Plaza Indonesia\",\n        \"status\": \"rejected\",\n        \"requires_approval\": true,\n        \"auto_approved\": false,\n        \"submitted_at\": \"2025-12-26T18:19:05.825678Z\"\n    }\n}"
+				},
+				{
+					"name": "409 Conflict",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"notes\": \"Rejected\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/expenses/{{expense_id}}/reject",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"expenses",
+								"{{expense_id}}",
+								"reject"
+							]
+						}
+					},
+					"status": "Conflict",
+					"code": 409,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 26 Dec 2025 18:19:35 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "45"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"errors\": \"Expense is not awaiting approval\"\n}"
+				},
+				{
+					"name": "404 Not Found",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"notes\": \"Rejected\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/expenses/{{expense_id}}/reject",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"expenses",
+								"{{expense_id}}",
+								"reject"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": null,
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 26 Dec 2025 18:19:54 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "30"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"errors\": \"Expense not found\"\n}"
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080"
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "expense_id",
+			"value": ""
+		}
+	]
+}
