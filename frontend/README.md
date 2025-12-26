@@ -1,6 +1,6 @@
-# Nuxt Minimal Starter
+# Expense Management System - Frontend
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Nuxt frontend using TailwindCSS + DaisyUI.
 
 ## Setup
 
@@ -37,6 +37,9 @@ yarn dev
 # bun
 bun run dev
 ```
+
+## Environment
+- `NUXT_PUBLIC_API_BASE` (default `http://localhost:8080`)
 
 ## Production
 
