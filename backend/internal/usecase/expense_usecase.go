@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"fmt"
 	"go-expense-management-system/internal/constants"
 	"go-expense-management-system/internal/entity"
 	"go-expense-management-system/internal/messages"
@@ -24,6 +25,8 @@ type ExpenseUseCase struct {
 	ExpenseRepository  *repository.ExpenseRepository
 	ApprovalRepository *repository.ApprovalRepository
 	HistoryRepository  *repository.ExpenseStatusHistoryRepository
+	UserRepository     *repository.UserRepository
+	EmailSender        EmailSender
 	PaymentQueue       PaymentQueue
 	PaymentProcessor   PaymentProcessor
 }
@@ -34,6 +37,8 @@ func NewExpenseUseCase(
 	expenseRepository *repository.ExpenseRepository,
 	approvalRepository *repository.ApprovalRepository,
 	historyRepository *repository.ExpenseStatusHistoryRepository,
+	userRepository *repository.UserRepository,
+	emailSender EmailSender,
 	paymentQueue PaymentQueue,
 	paymentProcessor PaymentProcessor,
 ) *ExpenseUseCase {
@@ -43,6 +48,8 @@ func NewExpenseUseCase(
 		ExpenseRepository:  expenseRepository,
 		ApprovalRepository: approvalRepository,
 		HistoryRepository:  historyRepository,
+		UserRepository:     userRepository,
+		EmailSender:        emailSender,
 		PaymentQueue:       paymentQueue,
 		PaymentProcessor:   paymentProcessor,
 	}
@@ -91,6 +98,10 @@ func (c *ExpenseUseCase) Create(ctx context.Context, auth *model.Auth, request *
 
 	if !requiresApproval {
 		c.enqueuePayment(expense)
+	} else {
+		if err := c.notifyApprovalRequest(ctx, expense); err != nil {
+			c.Log.Warnf("Failed to send approval notification: %+v", err)
+		}
 	}
 
 	return converter.ExpenseToResponse(expense, false), nil
@@ -422,4 +433,58 @@ func (c *ExpenseUseCase) recordStatusChange(
 	}
 
 	return c.HistoryRepository.Create(tx, history)
+}
+
+func (c *ExpenseUseCase) notifyApprovalRequest(ctx context.Context, expense *entity.Expense) error {
+	if c.EmailSender == nil || c.UserRepository == nil {
+		return nil
+	}
+
+	db := c.DB.WithContext(ctx)
+	managers, err := c.UserRepository.ListByRole(db, constants.RoleManager)
+	if err != nil {
+		return err
+	}
+	if len(managers) == 0 {
+		return nil
+	}
+
+	recipients := make([]string, 0, len(managers))
+	for _, manager := range managers {
+		if manager.Email != "" {
+			recipients = append(recipients, manager.Email)
+		}
+	}
+	if len(recipients) == 0 {
+		return nil
+	}
+
+	requestor := &entity.User{}
+	if err := c.UserRepository.FindById(db, requestor, expense.UserID); err != nil {
+		if c.Log != nil {
+			c.Log.Warnf("Failed to load requestor for approval email: %+v", err)
+		}
+	}
+
+	requestorName := strings.TrimSpace(requestor.Name)
+	if requestorName == "" {
+		requestorName = "Karyawan"
+	}
+
+	subject := fmt.Sprintf("Approval diperlukan: %s", expense.Description)
+	body := fmt.Sprintf(
+		"Halo Manager,\n\nPengajuan pengeluaran baru membutuhkan persetujuan.\n\nPengaju: %s (%s)\nJumlah: %s\nDeskripsi: %s\nWaktu: %s\n\nSilakan login untuk memberi keputusan.\nID Pengajuan: %s\n",
+		requestorName,
+		requestor.Email,
+		utils.FormatIDR(expense.AmountIDR),
+		expense.Description,
+		expense.SubmittedAt.Format(time.RFC3339),
+		expense.ID.String(),
+	)
+
+	return c.EmailSender.Send(ctx, model.EmailRequest{
+		To:      recipients,
+		Subject: subject,
+		Body:    body,
+	})
 }

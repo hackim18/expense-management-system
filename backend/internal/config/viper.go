@@ -32,6 +32,13 @@ func NewViper() *viper.Viper {
 	config.SetDefault("CORS_ALLOW_CREDENTIALS", false)
 	config.SetDefault("RATE_LIMIT", "100-M")
 	config.SetDefault("RATE_LIMIT_EXCLUDE_PATHS", "/health,/api/health,/api/metrics,/api/openapi.yaml,/swagger/*")
+	config.SetDefault("SMTP_ENABLED", false)
+	config.SetDefault("SMTP_HOST", "")
+	config.SetDefault("SMTP_PORT", 587)
+	config.SetDefault("SMTP_USERNAME", "")
+	config.SetDefault("SMTP_PASSWORD", "")
+	config.SetDefault("SMTP_FROM_EMAIL", "")
+	config.SetDefault("SMTP_FROM_NAME", "Expense Management")
 
 	config.SetConfigFile(".env")
 

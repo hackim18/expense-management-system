@@ -5,11 +5,11 @@ import (
 	"go-expense-management-system/internal/delivery/http"
 	"go-expense-management-system/internal/delivery/http/middleware"
 	"go-expense-management-system/internal/delivery/http/route"
+	"go-expense-management-system/internal/integration/email"
 	"go-expense-management-system/internal/integration/payment"
 	"go-expense-management-system/internal/repository"
 	"go-expense-management-system/internal/usecase"
 	"go-expense-management-system/internal/utils"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -28,21 +28,19 @@ type BootstrapConfig struct {
 }
 
 func Bootstrap(config *BootstrapConfig) {
-	// setup repositories
+	// Setup repositories
 	userRepository := repository.NewUserRepository(config.Log)
 	expenseRepository := repository.NewExpenseRepository(config.Log)
 	approvalRepository := repository.NewApprovalRepository(config.Log)
 	historyRepository := repository.NewExpenseStatusHistoryRepository(config.Log)
 
-	paymentBaseURL := config.Config.GetString("PAYMENT_BASE_URL")
-	paymentTimeout := time.Duration(config.Config.GetInt("PAYMENT_TIMEOUT_SECONDS")) * time.Second
-	paymentRetryCount := config.Config.GetInt("PAYMENT_RETRY_COUNT")
-	paymentRetryDelay := time.Duration(config.Config.GetInt("PAYMENT_RETRY_DELAY_SECONDS")) * time.Second
-	paymentQueueBuffer := config.Config.GetInt("PAYMENT_QUEUE_BUFFER")
+	// Setup integrations
+	paymentCfg := buildPaymentConfig(config.Config)
+	paymentClient := payment.NewClient(paymentCfg.BaseURL, paymentCfg.Timeout, config.Log)
 
-	paymentClient := payment.NewClient(paymentBaseURL, paymentTimeout, config.Log)
+	emailClient := email.NewClient(buildSMTPConfig(config.Config), config.Log)
 
-	// setup use cases
+	// Setup use cases
 	userUseCase := usecase.NewUserUseCase(config.DB, config.Log, config.JWT, userRepository)
 	expenseUseCase := usecase.NewExpenseUseCase(
 		config.DB,
@@ -50,28 +48,32 @@ func Bootstrap(config *BootstrapConfig) {
 		expenseRepository,
 		approvalRepository,
 		historyRepository,
+		userRepository,
+		emailClient,
 		nil,
 		paymentClient,
 	)
 
-	// setup controller
+	// Setup controllers
 	userController := http.NewUserController(userUseCase, config.Log, config.Validate)
 	expenseController := http.NewExpenseController(expenseUseCase, config.Log, config.Validate)
 
-	// setup middleware
+	// Setup middleware
 	authMiddleware := middleware.NewAuth(userUseCase)
 
+	// Setup background workers
 	paymentWorker := background.NewPaymentWorker(
-		paymentQueueBuffer,
-		paymentRetryCount,
-		paymentRetryDelay,
-		paymentTimeout,
+		paymentCfg.QueueBuffer,
+		paymentCfg.RetryCount,
+		paymentCfg.RetryDelay,
+		paymentCfg.Timeout,
 		config.Log,
 		expenseUseCase.ProcessPayment,
 	)
 	paymentWorker.Start()
 	expenseUseCase.PaymentQueue = paymentWorker
 
+	// Setup routes
 	routeConfig := route.RouteConfig{
 		Router:            config.Router,
 		UserController:    userController,
