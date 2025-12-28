@@ -255,9 +255,8 @@ go test -v ./...
 
 ## Swagger/OpenAPI
 
-- Spec file: `api/openapi.yaml`
-- Endpoint: `GET /api/openapi.yaml`
-- Swagger UI: `GET /swagger/index.html`
+- Spec file: [`http://localhost:8080/api/openapi.yaml`](http://localhost:8080/api/openapi.yaml)
+- Swagger UI: [`http://localhost:8080/swagger/index.html`](http://localhost:8080/swagger/index.html)
 
 ## Catatan Arsitektur
 
@@ -269,12 +268,6 @@ go test -v ./...
 
 - Payment mock dianggap sukses jika mengembalikan HTTP 200 atau idempotent 400.
 - Notifikasi email bersifat best-effort; jika gagal akan di-log dan tidak memblok request.
-
-## Perbaikan ke Depan (Improvement)
-
-- Tambah unit test business logic pada usecase.
-- Tambah integration test untuk alur API (approve & payment).
-- Tambah visibilitas background job (queue size, processing metrics).
 
 ---
 
